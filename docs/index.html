@@ -69,6 +69,7 @@
 </script>
   <style>
     :root {
+      
       --bg:      #07080d;
       --surf:    #0b0e16;
       --surf2:   #0f1520;
@@ -82,6 +83,7 @@
       --glow:    rgba(0,212,255,0.5);
       --grid-line: rgba(0,212,255,0.025);
       --scanline: rgba(0,0,0,0.06);
+      
     }
 
     [data-theme="light"] {
@@ -234,7 +236,23 @@
       padding: 10px 16px;
       border-bottom: 1px solid var(--border);
       text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+
+    .compare-link {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--cyan);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .compare-link:hover { opacity: 1; }
 
     /* ── Deal rows ── */
     .deal-row {
@@ -242,6 +260,7 @@
       grid-template-columns: 44px 1fr auto auto;
       align-items: center;
       padding: 13px 16px;
+      min-height: 48px;
       border-bottom: 1px solid rgba(0,212,255,0.05);
       gap: 12px;
       transition: background 0.15s;
@@ -427,11 +446,35 @@
     }
 
     /* ── Responsive ── */
-    @media (max-width: 540px) {
-      .deal-row { grid-template-columns: 36px 1fr auto; }
-      .deal-link { display: none; }
-      .site-header { flex-direction: column; gap: 12px; }
+    @media (max-width: 600px) {
+      body { padding: 20px 12px 60px; }
+
+      .theme-toggle { top: 10px; right: 10px; padding: 5px 8px; font-size: 9px; }
+
+      .site-header { flex-direction: column; gap: 8px; margin-bottom: 28px; }
       .site-date { text-align: left; }
+      .site-sub { display: none; }
+
+      .game-header { gap: 10px; }
+      .game-hero { width: 96px; height: 45px; }
+      .game-header-text { gap: 8px; }
+
+      .deal-row {
+        grid-template-columns: 36px 1fr auto;
+        grid-template-rows: auto auto;
+        padding: 12px;
+        gap: 6px;
+      }
+      .deal-rank { grid-row: 1 / 3; align-self: center; }
+      .deal-shop { grid-column: 2; grid-row: 1; font-size: 12px; }
+      .deal-price { grid-column: 3; grid-row: 1; font-size: 14px; }
+      .deal-buy   { grid-column: 2 / 4; grid-row: 2; text-align: center; font-size: 9px; }
+
+      .chart-stats { flex-wrap: wrap; }
+      .chart-stats span { flex: 1 1 33%; border-right: none; border-bottom: 1px solid var(--border); }
+      .chart-stats span:last-child { border-bottom: none; }
+
+      .section-rule { margin: 24px 0; }
     }
   </style>
 </head>
@@ -463,7 +506,10 @@
       </div>
 
       <div class="panel deals-panel" style="--game-colour:#00d4ff;--game-rgb:0,212,255">
-        <div class="panel-label">CURRENT BEST PRICES</div>
+        <div class="panel-label">
+          CURRENT BEST PRICES
+          <a class="compare-link" href="https://www.allkeyshop.com/blog/en-gb/buy-marathon-cd-key-compare-prices/" target="_blank" rel="noopener">◈ COMPARE ALL PRICES ›</a>
+        </div>
         
         <a class="deal-row" href="https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/" target="_blank" rel="noopener">
           <span class="deal-rank rank-gold" style="color:#00d4ff">#1</span>
@@ -472,7 +518,7 @@
             <span class="cut-badge">-10%</span>
           </span>
           <span class="deal-buy">BUY ›</span>
-          <span class="deal-price" style="color:#00d4ff">£27.02</span>
+          <span class="deal-price" style="color:#00d4ff">£26.87</span>
         </a>
         <a class="deal-row" href="https://itad.link/019beb21-7225-70bf-96e7-c4425cfe6371/" target="_blank" rel="noopener">
           <span class="deal-rank rank-silver" >#2</span>
@@ -481,7 +527,7 @@
             <span class="cut-badge">-5%</span>
           </span>
           <span class="deal-buy">BUY ›</span>
-          <span class="deal-price" >£28.52</span>
+          <span class="deal-price" >£28.36</span>
         </a>
         <a class="deal-row" href="https://itad.link/01980f0c-bb40-708e-8cd5-55c75e174da7/" target="_blank" rel="noopener">
           <span class="deal-rank rank-bronze" >#3</span>
@@ -508,7 +554,7 @@
             <span class="cut-badge">-10%</span>
           </span>
           <span class="deal-buy">BUY ›</span>
-          <span class="deal-price" >£31.17</span>
+          <span class="deal-price" >£31.14</span>
         </a>
       </div>
 
@@ -521,7 +567,7 @@
         <div class="chart-stats">
           <span>TRACKED <strong>6d</strong></span>
           <span>ALL-TIME LOW <strong>£26.84</strong></span>
-          <span>TODAY <strong>£27.02</strong></span>
+          <span>TODAY <strong>£26.87</strong></span>
         </div>
       </div>
     </section><div class="section-rule"></div>
@@ -530,42 +576,27 @@
         <img class="game-hero" src="https://cdn.akamai.steamstatic.com/steam/apps/1285190/header.jpg" alt="Borderlands 4">
         <div class="game-header-text">
           <h2 class="game-title" style="color:#ff44cc;text-shadow:0 0 12px rgba(255,68,204,0.4)">◈ Borderlands 4</h2>
-          <span class="atl-badge">◈ ALL-TIME LOW</span>
+          
         </div>
       </div>
 
       <div class="panel deals-panel" style="--game-colour:#ff44cc;--game-rgb:255,68,204">
-        <div class="panel-label">CURRENT BEST PRICES</div>
+        <div class="panel-label">
+          CURRENT BEST PRICES
+          <a class="compare-link" href="https://www.allkeyshop.com/blog/en-gb/buy-borderlands-4-cd-key-compare-prices/" target="_blank" rel="noopener">◈ COMPARE ALL PRICES ›</a>
+        </div>
         
-        <a class="deal-row" href="https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/" target="_blank" rel="noopener">
-          <span class="deal-rank rank-gold" style="color:#ff44cc">#1</span>
-          <span class="deal-shop">
-            GreenManGaming
-            <span class="cut-badge">-40%</span>
-          </span>
-          <span class="deal-buy">BUY ›</span>
-          <span class="deal-price" style="color:#ff44cc">£36.11</span>
-        </a>
-        <a class="deal-row" href="https://itad.link/0197ab78-5b6b-7205-926e-708755f91aeb/" target="_blank" rel="noopener">
-          <span class="deal-rank rank-silver" >#2</span>
-          <span class="deal-shop">
-            GreenManGaming
-            <span class="cut-badge">-40%</span>
-          </span>
-          <span class="deal-buy">BUY ›</span>
-          <span class="deal-price" >£36.11</span>
-        </a>
         <a class="deal-row" href="https://itad.link/01978382-1703-7143-8edd-f2c9003d8943/" target="_blank" rel="noopener">
-          <span class="deal-rank rank-bronze" >#3</span>
+          <span class="deal-rank rank-gold" style="color:#ff44cc">#1</span>
           <span class="deal-shop">
             WinGameStore
             
           </span>
           <span class="deal-buy">BUY ›</span>
-          <span class="deal-price" >£52.55</span>
+          <span class="deal-price" style="color:#ff44cc">£52.25</span>
         </a>
         <a class="deal-row" href="https://itad.link/01979d69-9935-7073-81ff-4b949bd503d2/" target="_blank" rel="noopener">
-          <span class="deal-rank rank-bronze" >#4</span>
+          <span class="deal-rank rank-silver" >#2</span>
           <span class="deal-shop">
             GameBillet
             <span class="cut-badge">-5%</span>
@@ -574,9 +605,27 @@
           <span class="deal-price" >£56.99</span>
         </a>
         <a class="deal-row" href="https://itad.link/01995d77-e5ac-7288-80f8-9ede598141d5/" target="_blank" rel="noopener">
-          <span class="deal-rank rank-bronze" >#5</span>
+          <span class="deal-rank rank-bronze" >#3</span>
           <span class="deal-shop">
             Gamesload
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£59.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/01996006-cf2d-734d-abff-23de255b27d9/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#4</span>
+          <span class="deal-shop">
+            Dreamgame
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£59.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/0199398f-45a0-73c6-a26e-def0aba607d9/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#5</span>
+          <span class="deal-shop">
+            Steam
             
           </span>
           <span class="deal-buy">BUY ›</span>
@@ -593,7 +642,403 @@
         <div class="chart-stats">
           <span>TRACKED <strong>15d</strong></span>
           <span>ALL-TIME LOW <strong>£36.11</strong></span>
-          <span>TODAY <strong>£36.11</strong></span>
+          <span>TODAY <strong>£52.25</strong></span>
+        </div>
+      </div>
+    </section><div class="section-rule"></div>
+    <section class="game-section">
+      <div class="game-header">
+        <img class="game-hero" src="https://cdn.akamai.steamstatic.com/steam/apps/1449110/header.jpg" alt="The Outer Worlds 2">
+        <div class="game-header-text">
+          <h2 class="game-title" style="color:#ffcc00;text-shadow:0 0 12px rgba(255,204,0,0.4)">◈ The Outer Worlds 2</h2>
+          
+        </div>
+      </div>
+
+      <div class="panel deals-panel" style="--game-colour:#ffcc00;--game-rgb:255,204,0">
+        <div class="panel-label">
+          CURRENT BEST PRICES
+          <a class="compare-link" href="https://www.allkeyshop.com/blog/en-gb/buy-the-outer-worlds-2-cd-key-compare-prices/" target="_blank" rel="noopener">◈ COMPARE ALL PRICES ›</a>
+        </div>
+        
+        <a class="deal-row" href="https://itad.link/0197643e-af9a-724a-8ad0-db7937b23f7e/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-gold" style="color:#ffcc00">#1</span>
+          <span class="deal-shop">
+            GamesPlanet UK
+            <span class="cut-badge">-10%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" style="color:#ffcc00">£53.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/0197643e-e001-7168-8272-4c38b8d42ff6/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-silver" >#2</span>
+          <span class="deal-shop">
+            GamesPlanet FR
+            <span class="cut-badge">-10%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£54.50</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/0197643f-1543-70f8-b173-aaacb49144fa/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#3</span>
+          <span class="deal-shop">
+            GamesPlanet DE
+            <span class="cut-badge">-10%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£54.50</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/019a30ea-03dd-7033-a618-133a1e96df84/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#4</span>
+          <span class="deal-shop">
+            Steam
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£59.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/019a312a-02d6-7374-bc31-3c3daed971bf/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#5</span>
+          <span class="deal-shop">
+            Blizzard
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£59.99</span>
+        </a>
+      </div>
+
+      
+      <div class="panel chart-panel" style="--game-colour:#ffcc00;--game-rgb:255,204,0">
+        <div class="panel-label">PRICE HISTORY</div>
+        <div class="canvas-wrap">
+          <canvas id="chart-the-outer-worlds-2"></canvas>
+        </div>
+        <div class="chart-stats">
+          <span>TRACKED <strong>3d</strong></span>
+          <span>ALL-TIME LOW <strong>£41.99</strong></span>
+          <span>TODAY <strong>£53.99</strong></span>
+        </div>
+      </div>
+    </section><div class="section-rule"></div>
+    <section class="game-section">
+      <div class="game-header">
+        
+        <div class="game-header-text">
+          <h2 class="game-title" style="color:#00ff88;text-shadow:0 0 12px rgba(0,255,136,0.4)">◈ Forza Horizon 6</h2>
+          
+        </div>
+      </div>
+
+      <div class="panel deals-panel" style="--game-colour:#00ff88;--game-rgb:0,255,136">
+        <div class="panel-label">
+          CURRENT BEST PRICES
+          <a class="compare-link" href="https://www.allkeyshop.com/blog/en-gb/buy-forza-horizon-6-cd-key-compare-prices/" target="_blank" rel="noopener">◈ COMPARE ALL PRICES ›</a>
+        </div>
+        
+        <a class="deal-row" href="https://itad.link/019be6fb-ccfa-7247-b8a1-c5eac2a385ed/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-gold" style="color:#00ff88">#1</span>
+          <span class="deal-shop">
+            Steam
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" style="color:#00ff88">£59.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/019be765-84c9-7242-9473-73ebf34d19c8/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-silver" >#2</span>
+          <span class="deal-shop">
+            Microsoft Store
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£59.99</span>
+        </a>
+      </div>
+
+      
+      <div class="panel chart-panel" style="--game-colour:#00ff88;--game-rgb:0,255,136">
+        <div class="panel-label">PRICE HISTORY</div>
+        <div class="canvas-wrap">
+          <canvas id="chart-forza-horizon-6"></canvas>
+        </div>
+        <div class="chart-stats">
+          <span>TRACKED <strong>1d</strong></span>
+          <span>ALL-TIME LOW <strong>£59.99</strong></span>
+          <span>TODAY <strong>£59.99</strong></span>
+        </div>
+      </div>
+    </section><div class="section-rule"></div>
+    <section class="game-section">
+      <div class="game-header">
+        <img class="game-hero" src="https://cdn.akamai.steamstatic.com/steam/apps/2457220/header.jpg" alt="Avowed">
+        <div class="game-header-text">
+          <h2 class="game-title" style="color:#ff6b35;text-shadow:0 0 12px rgba(255,107,53,0.4)">◈ Avowed</h2>
+          
+        </div>
+      </div>
+
+      <div class="panel deals-panel" style="--game-colour:#ff6b35;--game-rgb:255,107,53">
+        <div class="panel-label">
+          CURRENT BEST PRICES
+          <a class="compare-link" href="https://www.allkeyshop.com/blog/en-gb/buy-avowed-cd-key-compare-prices/" target="_blank" rel="noopener">◈ COMPARE ALL PRICES ›</a>
+        </div>
+        
+        <a class="deal-row" href="https://itad.link/01932be3-727b-7107-995a-a956fc7b9e28/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-gold" style="color:#ff6b35">#1</span>
+          <span class="deal-shop">
+            Steam
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" style="color:#ff6b35">£39.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/01932c3a-515e-72ab-8139-7f6052996bdd/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-silver" >#2</span>
+          <span class="deal-shop">
+            Blizzard
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£39.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/01932c25-9f36-7286-8979-403b2160264c/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#3</span>
+          <span class="deal-shop">
+            Microsoft Store
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£39.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/0193307c-04cd-70c4-8888-8e31d4887afe/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#4</span>
+          <span class="deal-shop">
+            GamesPlanet DE
+            <span class="cut-badge">-10%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£62.29</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/0193307b-c951-7180-ab44-3d200d99c959/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#5</span>
+          <span class="deal-shop">
+            GamesPlanet FR
+            <span class="cut-badge">-10%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£62.29</span>
+        </a>
+      </div>
+
+      
+      <div class="panel chart-panel" style="--game-colour:#ff6b35;--game-rgb:255,107,53">
+        <div class="panel-label">PRICE HISTORY</div>
+        <div class="canvas-wrap">
+          <canvas id="chart-avowed"></canvas>
+        </div>
+        <div class="chart-stats">
+          <span>TRACKED <strong>3d</strong></span>
+          <span>ALL-TIME LOW <strong>£27.99</strong></span>
+          <span>TODAY <strong>£39.99</strong></span>
+        </div>
+      </div>
+    </section><div class="section-rule"></div>
+    <section class="game-section">
+      <div class="game-header">
+        <img class="game-hero" src="https://cdn.akamai.steamstatic.com/steam/apps/3159330/header.jpg" alt="Assassin's Creed Shadows">
+        <div class="game-header-text">
+          <h2 class="game-title" style="color:#aa44ff;text-shadow:0 0 12px rgba(170,68,255,0.4)">◈ Assassin's Creed Shadows</h2>
+          <span class="atl-badge">◈ ALL-TIME LOW</span>
+        </div>
+      </div>
+
+      <div class="panel deals-panel" style="--game-colour:#aa44ff;--game-rgb:170,68,255">
+        <div class="panel-label">
+          CURRENT BEST PRICES
+          <a class="compare-link" href="https://www.allkeyshop.com/blog/en-gb/buy-assassins-creed-shadows-cd-key-compare-prices/" target="_blank" rel="noopener">◈ COMPARE ALL PRICES ›</a>
+        </div>
+        
+        <a class="deal-row" href="https://itad.link/018f7d09-cfea-7103-8d76-acfbc0879241/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-gold" style="color:#aa44ff">#1</span>
+          <span class="deal-shop">
+            GamesPlanet US
+            <span class="cut-badge">-55%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" style="color:#aa44ff">£23.73</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/018f7d09-b615-7359-a22b-32e1572dc2ac/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-silver" >#2</span>
+          <span class="deal-shop">
+            GamesPlanet UK
+            <span class="cut-badge">-55%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£27.25</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/018f7d1c-289f-702d-9fb2-b730b6a99065/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#3</span>
+          <span class="deal-shop">
+            GamesPlanet FR
+            <span class="cut-badge">-55%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£27.51</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/018f7d1c-370d-7362-be44-c7cfbdc2d111/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#4</span>
+          <span class="deal-shop">
+            GamesPlanet DE
+            <span class="cut-badge">-55%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£27.51</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/0195b105-8539-73b4-9797-ccf7739bc4ea/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#5</span>
+          <span class="deal-shop">
+            Steam
+            <span class="cut-badge">-50%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£29.99</span>
+        </a>
+      </div>
+
+      
+      <div class="panel chart-panel" style="--game-colour:#aa44ff;--game-rgb:170,68,255">
+        <div class="panel-label">PRICE HISTORY</div>
+        <div class="canvas-wrap">
+          <canvas id="chart-assassins-creed-shadows"></canvas>
+        </div>
+        <div class="chart-stats">
+          <span>TRACKED <strong>11d</strong></span>
+          <span>ALL-TIME LOW <strong>£23.73</strong></span>
+          <span>TODAY <strong>£23.73</strong></span>
+        </div>
+      </div>
+    </section><div class="section-rule"></div>
+    <section class="game-section">
+      <div class="game-header">
+        <img class="game-hero" src="https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg" alt="Baldur's Gate 3">
+        <div class="game-header-text">
+          <h2 class="game-title" style="color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.4)">◈ Baldur's Gate 3</h2>
+          
+        </div>
+      </div>
+
+      <div class="panel deals-panel" style="--game-colour:#00d4ff;--game-rgb:0,212,255">
+        <div class="panel-label">
+          CURRENT BEST PRICES
+          <a class="compare-link" href="https://www.allkeyshop.com/blog/en-gb/buy-baldurs-gate-3-cd-key-compare-prices/" target="_blank" rel="noopener">◈ COMPARE ALL PRICES ›</a>
+        </div>
+        
+        <a class="deal-row" href="https://itad.link/018d9386-2caa-7166-99c3-53160d559490/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-gold" style="color:#00d4ff">#1</span>
+          <span class="deal-shop">
+            GOG
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" style="color:#00d4ff">£49.99</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/018d9386-2caa-7166-99c3-53160e69d7c5/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-silver" >#2</span>
+          <span class="deal-shop">
+            Steam
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£49.99</span>
+        </a>
+      </div>
+
+      
+      <div class="panel chart-panel" style="--game-colour:#00d4ff;--game-rgb:0,212,255">
+        <div class="panel-label">PRICE HISTORY</div>
+        <div class="canvas-wrap">
+          <canvas id="chart-baldurs-gate-3"></canvas>
+        </div>
+        <div class="chart-stats">
+          <span>TRACKED <strong>3d</strong></span>
+          <span>ALL-TIME LOW <strong>£37.49</strong></span>
+          <span>TODAY <strong>£49.99</strong></span>
+        </div>
+      </div>
+    </section><div class="section-rule"></div>
+    <section class="game-section">
+      <div class="game-header">
+        <img class="game-hero" src="https://cdn.akamai.steamstatic.com/steam/apps/1868140/header.jpg" alt="DAVE THE DIVER">
+        <div class="game-header-text">
+          <h2 class="game-title" style="color:#ff44cc;text-shadow:0 0 12px rgba(255,68,204,0.4)">◈ DAVE THE DIVER</h2>
+          
+        </div>
+      </div>
+
+      <div class="panel deals-panel" style="--game-colour:#ff44cc;--game-rgb:255,68,204">
+        <div class="panel-label">
+          CURRENT BEST PRICES
+          <a class="compare-link" href="https://www.allkeyshop.com/blog/en-gb/buy-dave-the-diver-cd-key-compare-prices/" target="_blank" rel="noopener">◈ COMPARE ALL PRICES ›</a>
+        </div>
+        
+        <a class="deal-row" href="https://itad.link/018dd7ee-6cfb-7288-928e-047e89263d02/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-gold" style="color:#ff44cc">#1</span>
+          <span class="deal-shop">
+            IndieGala Store
+            <span class="cut-badge">-35%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" style="color:#ff44cc">£11.04</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/018eada6-93c9-70a8-b447-2384934ab130/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-silver" >#2</span>
+          <span class="deal-shop">
+            GamesPlanet US
+            <span class="cut-badge">-10%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£13.43</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/018ebfbf-6bf7-72b5-a1e3-3071b8cff4c0/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#3</span>
+          <span class="deal-shop">
+            JoyBuggy
+            <span class="cut-badge">-16%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£14.25</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/0194707d-5ee1-7140-9dda-06bac430ded0/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#4</span>
+          <span class="deal-shop">
+            WinGameStore
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£14.92</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/018eada6-7965-73fc-8daf-c91d4dc9467f/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#5</span>
+          <span class="deal-shop">
+            GamesPlanet UK
+            <span class="cut-badge">-10%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£15.29</span>
+        </a>
+      </div>
+
+      
+      <div class="panel chart-panel" style="--game-colour:#ff44cc;--game-rgb:255,68,204">
+        <div class="panel-label">PRICE HISTORY</div>
+        <div class="canvas-wrap">
+          <canvas id="chart-dave-the-diver"></canvas>
+        </div>
+        <div class="chart-stats">
+          <span>TRACKED <strong>9d</strong></span>
+          <span>ALL-TIME LOW <strong>£7.13</strong></span>
+          <span>TODAY <strong>£11.04</strong></span>
         </div>
       </div>
     </section>
@@ -623,7 +1068,7 @@
     applyTheme(localStorage.getItem('theme') || 'light');
 
     // ── Charts ────────────────────────────────────────────────────────────────
-    const DATA = {"currency":{"code":"GBP","symbol":"£","country":"GB"},"games":[{"title":"Marathon","slug":"marathon","topDeals":[{"rank":1,"price":27.02,"cut":10,"shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/"},{"rank":2,"price":28.52,"cut":5,"shop":"WinGameStore","url":"https://itad.link/019beb21-7225-70bf-96e7-c4425cfe6371/"},{"rank":3,"price":29.74,"cut":15,"shop":"GreenManGaming","url":"https://itad.link/01980f0c-bb40-708e-8cd5-55c75e174da7/"},{"rank":4,"price":30.09,"cut":14,"shop":"Fanatical","url":"https://itad.link/019be02d-afd1-721f-bf07-66e81dbd2c18/"},{"rank":5,"price":31.17,"cut":10,"shop":"GamesPlanet DE","url":"https://itad.link/019be0f7-6a2b-73e3-8564-6a11ff88b8e6/"}],"history":[{"date":"2026-02-11","price":"34.99","shop":"DLGamer","url":""},{"date":"2026-02-23","price":"30.99","shop":"AllYouPlay","url":""},{"date":"2026-03-04","price":"34.99","shop":"AllYouPlay","url":""},{"date":"2026-03-06","price":"31.49","shop":"IndieGala Store","url":""},{"date":"2026-03-08","price":"26.84","shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/"},{"date":"2026-03-09","price":27.02,"shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/"}],"allTimeLow":26.84,"isAtl":false,"daysTracked":6,"colour":"#00d4ff","steamAppId":"3065800"},{"title":"Borderlands 4","slug":"borderlands-4","topDeals":[{"rank":1,"price":36.11,"cut":40,"shop":"GreenManGaming","url":"https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/"},{"rank":2,"price":36.11,"cut":40,"shop":"GreenManGaming","url":"https://itad.link/0197ab78-5b6b-7205-926e-708755f91aeb/"},{"rank":3,"price":52.55,"cut":0,"shop":"WinGameStore","url":"https://itad.link/01978382-1703-7143-8edd-f2c9003d8943/"},{"rank":4,"price":56.99,"cut":5,"shop":"GameBillet","url":"https://itad.link/01979d69-9935-7073-81ff-4b949bd503d2/"},{"rank":5,"price":59.99,"cut":0,"shop":"Gamesload","url":"https://itad.link/01995d77-e5ac-7288-80f8-9ede598141d5/"}],"history":[{"date":"2026-02-09","price":"41.99","shop":"Epic Game Store","url":""},{"date":"2026-02-10","price":"59.99","shop":"GamersGate","url":""},{"date":"2026-02-11","price":"56.99","shop":"GameBillet","url":""},{"date":"2026-02-16","price":"36.53","shop":"GreenManGaming","url":""},{"date":"2026-02-17","price":"41.99","shop":"IndieGala Store","url":""},{"date":"2026-02-19","price":"59.99","shop":"Steam","url":""},{"date":"2026-02-21","price":"59.99","shop":"2game","url":""},{"date":"2026-02-22","price":"56.39","shop":"2game","url":""},{"date":"2026-02-23","price":"59.99","shop":"Epic Game Store","url":""},{"date":"2026-02-26","price":"59.99","shop":"Humble Store","url":""},{"date":"2026-03-03","price":"59.99","shop":"GamersGate","url":""},{"date":"2026-03-04","price":"56.99","shop":"GameBillet","url":""},{"date":"2026-03-06","price":"36.11","shop":"GreenManGaming","url":""},{"date":"2026-03-08","price":"36.11","shop":"GreenManGaming","url":"https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/"},{"date":"2026-03-09","price":36.11,"shop":"GreenManGaming","url":"https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/"}],"allTimeLow":36.11,"isAtl":true,"daysTracked":15,"colour":"#ff44cc","steamAppId":"1285190"}]};
+    const DATA = {"currency":{"code":"GBP","symbol":"£","country":"GB"},"games":[{"title":"Marathon","slug":"marathon","topDeals":[{"rank":1,"price":26.87,"cut":10,"shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/"},{"rank":2,"price":28.36,"cut":5,"shop":"WinGameStore","url":"https://itad.link/019beb21-7225-70bf-96e7-c4425cfe6371/"},{"rank":3,"price":29.74,"cut":15,"shop":"GreenManGaming","url":"https://itad.link/01980f0c-bb40-708e-8cd5-55c75e174da7/"},{"rank":4,"price":30.09,"cut":14,"shop":"Fanatical","url":"https://itad.link/019be02d-afd1-721f-bf07-66e81dbd2c18/"},{"rank":5,"price":31.14,"cut":10,"shop":"GamesPlanet DE","url":"https://itad.link/019be0f7-6a2b-73e3-8564-6a11ff88b8e6/"}],"history":[{"date":"2026-02-11","price":"34.99","shop":"DLGamer","url":"\r"},{"date":"2026-02-23","price":"30.99","shop":"AllYouPlay","url":"\r"},{"date":"2026-03-04","price":"34.99","shop":"AllYouPlay","url":"\r"},{"date":"2026-03-06","price":"31.49","shop":"IndieGala Store","url":"\r"},{"date":"2026-03-08","price":"26.84","shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/\r"},{"date":"2026-03-09","price":26.87,"shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/"}],"allTimeLow":26.84,"isAtl":false,"daysTracked":6,"colour":"#00d4ff","steamAppId":"3065800"},{"title":"Borderlands 4","slug":"borderlands-4","topDeals":[{"rank":1,"price":52.25,"cut":0,"shop":"WinGameStore","url":"https://itad.link/01978382-1703-7143-8edd-f2c9003d8943/"},{"rank":2,"price":56.99,"cut":5,"shop":"GameBillet","url":"https://itad.link/01979d69-9935-7073-81ff-4b949bd503d2/"},{"rank":3,"price":59.99,"cut":0,"shop":"Gamesload","url":"https://itad.link/01995d77-e5ac-7288-80f8-9ede598141d5/"},{"rank":4,"price":59.99,"cut":0,"shop":"Dreamgame","url":"https://itad.link/01996006-cf2d-734d-abff-23de255b27d9/"},{"rank":5,"price":59.99,"cut":0,"shop":"Steam","url":"https://itad.link/0199398f-45a0-73c6-a26e-def0aba607d9/"}],"history":[{"date":"2026-02-09","price":"41.99","shop":"Epic Game Store","url":"\r"},{"date":"2026-02-10","price":"59.99","shop":"GamersGate","url":"\r"},{"date":"2026-02-11","price":"56.99","shop":"GameBillet","url":"\r"},{"date":"2026-02-16","price":"36.53","shop":"GreenManGaming","url":"\r"},{"date":"2026-02-17","price":"41.99","shop":"IndieGala Store","url":"\r"},{"date":"2026-02-19","price":"59.99","shop":"Steam","url":"\r"},{"date":"2026-02-21","price":"59.99","shop":"2game","url":"\r"},{"date":"2026-02-22","price":"56.39","shop":"2game","url":"\r"},{"date":"2026-02-23","price":"59.99","shop":"Epic Game Store","url":"\r"},{"date":"2026-02-26","price":"59.99","shop":"Humble Store","url":"\r"},{"date":"2026-03-03","price":"59.99","shop":"GamersGate","url":"\r"},{"date":"2026-03-04","price":"56.99","shop":"GameBillet","url":"\r"},{"date":"2026-03-06","price":"36.11","shop":"GreenManGaming","url":"\r"},{"date":"2026-03-08","price":"36.11","shop":"GreenManGaming","url":"https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/\r"},{"date":"2026-03-09","price":52.25,"shop":"WinGameStore","url":"https://itad.link/01978382-1703-7143-8edd-f2c9003d8943/"}],"allTimeLow":36.11,"isAtl":false,"daysTracked":15,"colour":"#ff44cc","steamAppId":"1285190"},{"title":"The Outer Worlds 2","slug":"the-outer-worlds-2","topDeals":[{"rank":1,"price":53.99,"cut":10,"shop":"GamesPlanet UK","url":"https://itad.link/0197643e-af9a-724a-8ad0-db7937b23f7e/"},{"rank":2,"price":54.5,"cut":10,"shop":"GamesPlanet FR","url":"https://itad.link/0197643e-e001-7168-8272-4c38b8d42ff6/"},{"rank":3,"price":54.5,"cut":10,"shop":"GamesPlanet DE","url":"https://itad.link/0197643f-1543-70f8-b173-aaacb49144fa/"},{"rank":4,"price":59.99,"cut":0,"shop":"Steam","url":"https://itad.link/019a30ea-03dd-7033-a618-133a1e96df84/"},{"rank":5,"price":59.99,"cut":0,"shop":"Blizzard","url":"https://itad.link/019a312a-02d6-7374-bc31-3c3daed971bf/"}],"history":[{"date":"2026-02-12","price":"41.99","shop":"Microsoft Store","url":""},{"date":"2026-02-26","price":"59.99","shop":"Microsoft Store","url":""},{"date":"2026-03-09","price":53.99,"shop":"GamesPlanet UK","url":"https://itad.link/0197643e-af9a-724a-8ad0-db7937b23f7e/"}],"allTimeLow":41.99,"isAtl":false,"daysTracked":3,"colour":"#ffcc00","steamAppId":"1449110"},{"title":"Forza Horizon 6","slug":"forza-horizon-6","topDeals":[{"rank":1,"price":59.99,"cut":0,"shop":"Steam","url":"https://itad.link/019be6fb-ccfa-7247-b8a1-c5eac2a385ed/"},{"rank":2,"price":59.99,"cut":0,"shop":"Microsoft Store","url":"https://itad.link/019be765-84c9-7242-9473-73ebf34d19c8/"}],"history":[{"date":"2026-03-09","price":59.99,"shop":"Steam","url":"https://itad.link/019be6fb-ccfa-7247-b8a1-c5eac2a385ed/"}],"allTimeLow":59.99,"isAtl":false,"daysTracked":1,"colour":"#00ff88","steamAppId":null},{"title":"Avowed","slug":"avowed","topDeals":[{"rank":1,"price":39.99,"cut":0,"shop":"Steam","url":"https://itad.link/01932be3-727b-7107-995a-a956fc7b9e28/"},{"rank":2,"price":39.99,"cut":0,"shop":"Blizzard","url":"https://itad.link/01932c3a-515e-72ab-8139-7f6052996bdd/"},{"rank":3,"price":39.99,"cut":0,"shop":"Microsoft Store","url":"https://itad.link/01932c25-9f36-7286-8979-403b2160264c/"},{"rank":4,"price":62.29,"cut":10,"shop":"GamesPlanet DE","url":"https://itad.link/0193307c-04cd-70c4-8888-8e31d4887afe/"},{"rank":5,"price":62.29,"cut":10,"shop":"GamesPlanet FR","url":"https://itad.link/0193307b-c951-7180-ab44-3d200d99c959/"}],"history":[{"date":"2026-02-12","price":"27.99","shop":"Microsoft Store","url":""},{"date":"2026-02-17","price":"39.99","shop":"Microsoft Store","url":""},{"date":"2026-03-09","price":39.99,"shop":"Steam","url":"https://itad.link/01932be3-727b-7107-995a-a956fc7b9e28/"}],"allTimeLow":27.99,"isAtl":false,"daysTracked":3,"colour":"#ff6b35","steamAppId":"2457220"},{"title":"Assassin's Creed Shadows","slug":"assassins-creed-shadows","topDeals":[{"rank":1,"price":23.73,"cut":55,"shop":"GamesPlanet US","url":"https://itad.link/018f7d09-cfea-7103-8d76-acfbc0879241/"},{"rank":2,"price":27.25,"cut":55,"shop":"GamesPlanet UK","url":"https://itad.link/018f7d09-b615-7359-a22b-32e1572dc2ac/"},{"rank":3,"price":27.51,"cut":55,"shop":"GamesPlanet FR","url":"https://itad.link/018f7d1c-289f-702d-9fb2-b730b6a99065/"},{"rank":4,"price":27.51,"cut":55,"shop":"GamesPlanet DE","url":"https://itad.link/018f7d1c-370d-7362-be44-c7cfbdc2d111/"},{"rank":5,"price":29.99,"cut":50,"shop":"Steam","url":"https://itad.link/0195b105-8539-73b4-9797-ccf7739bc4ea/"}],"history":[{"date":"2026-02-08","price":"53.99","shop":"GamesPlanet UK","url":""},{"date":"2026-02-09","price":"29.99","shop":"Epic Game Store","url":""},{"date":"2026-02-12","price":"29.99","shop":"Ubisoft Store","url":""},{"date":"2026-02-16","price":"27","shop":"GreenManGaming","url":""},{"date":"2026-02-22","price":"27.42","shop":"GamesPlanet UK","url":""},{"date":"2026-02-23","price":"59.99","shop":"Epic Game Store","url":""},{"date":"2026-02-24","price":"59.99","shop":"GreenManGaming","url":""},{"date":"2026-02-26","price":"29.99","shop":"Steam","url":""},{"date":"2026-03-02","price":"53.99","shop":"GamesPlanet UK","url":""},{"date":"2026-03-03","price":"59.99","shop":"Ubisoft Store","url":""},{"date":"2026-03-09","price":23.73,"shop":"GamesPlanet US","url":"https://itad.link/018f7d09-cfea-7103-8d76-acfbc0879241/"}],"allTimeLow":23.73,"isAtl":true,"daysTracked":11,"colour":"#aa44ff","steamAppId":"3159330"},{"title":"Baldur's Gate 3","slug":"baldurs-gate-3","topDeals":[{"rank":1,"price":49.99,"cut":0,"shop":"GOG","url":"https://itad.link/018d9386-2caa-7166-99c3-53160d559490/"},{"rank":2,"price":49.99,"cut":0,"shop":"Steam","url":"https://itad.link/018d9386-2caa-7166-99c3-53160e69d7c5/"}],"history":[{"date":"2026-02-26","price":"37.49","shop":"GOG","url":""},{"date":"2026-03-02","price":"49.99","shop":"Steam","url":""},{"date":"2026-03-09","price":49.99,"shop":"GOG","url":"https://itad.link/018d9386-2caa-7166-99c3-53160d559490/"}],"allTimeLow":37.49,"isAtl":false,"daysTracked":3,"colour":"#00d4ff","steamAppId":"1086940"},{"title":"DAVE THE DIVER","slug":"dave-the-diver","topDeals":[{"rank":1,"price":11.04,"cut":35,"shop":"IndieGala Store","url":"https://itad.link/018dd7ee-6cfb-7288-928e-047e89263d02/"},{"rank":2,"price":13.43,"cut":10,"shop":"GamesPlanet US","url":"https://itad.link/018eada6-93c9-70a8-b447-2384934ab130/"},{"rank":3,"price":14.25,"cut":16,"shop":"JoyBuggy","url":"https://itad.link/018ebfbf-6bf7-72b5-a1e3-3071b8cff4c0/"},{"rank":4,"price":14.92,"cut":0,"shop":"WinGameStore","url":"https://itad.link/0194707d-5ee1-7140-9dda-06bac430ded0/"},{"rank":5,"price":15.29,"cut":10,"shop":"GamesPlanet UK","url":"https://itad.link/018eada6-7965-73fc-8daf-c91d4dc9467f/"}],"history":[{"date":"2026-02-09","price":"7.13","shop":"Fanatical","url":""},{"date":"2026-02-10","price":"9.34","shop":"Steam","url":""},{"date":"2026-02-17","price":"7.21","shop":"IndieGala Store","url":""},{"date":"2026-02-23","price":"16.99","shop":"Epic Game Store","url":""},{"date":"2026-02-24","price":"16.99","shop":"GamersGate","url":""},{"date":"2026-02-25","price":"14.25","shop":"JoyBuggy","url":""},{"date":"2026-02-26","price":"9.2","shop":"Microsoft Store","url":""},{"date":"2026-03-05","price":"16.74","shop":"Microsoft Store","url":""},{"date":"2026-03-09","price":11.04,"shop":"IndieGala Store","url":"https://itad.link/018dd7ee-6cfb-7288-928e-047e89263d02/"}],"allTimeLow":7.13,"isAtl":false,"daysTracked":9,"colour":"#ff44cc","steamAppId":"1868140"}]};
     const SYM  = DATA.currency.symbol;
 
     Chart.defaults.color         = '#7a8a9a';

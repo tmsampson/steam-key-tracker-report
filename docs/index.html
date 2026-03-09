@@ -1,1 +1,636 @@
-<html><body>Report will appear after the first daily run.</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>// STEAM KEY TRACKER</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+  <style>
+    :root {
+      --bg:      #07080d;
+      --surf:    #0b0e16;
+      --surf2:   #0f1520;
+      --cyan:    #00d4ff;
+      --orange:  #ff6b35;
+      --red:     #ff2255;
+      --green:   #00ff88;
+      --text:    #b8cfe0;
+      --muted:   #3a4a5a;
+      --border:  rgba(0,212,255,0.15);
+      --glow:    rgba(0,212,255,0.5);
+      --grid-line: rgba(0,212,255,0.025);
+      --scanline: rgba(0,0,0,0.06);
+    }
+
+    [data-theme="light"] {
+      --bg:      #f0f2f5;
+      --surf:    #ffffff;
+      --surf2:   #e8ebf0;
+      --cyan:    #0088bb;
+      --orange:  #d4521a;
+      --red:     #cc1144;
+      --green:   #007744;
+      --text:    #1a2a3a;
+      --muted:   #7a8a9a;
+      --border:  rgba(0,136,187,0.2);
+      --glow:    rgba(0,136,187,0.3);
+      --grid-line: rgba(0,136,187,0.06);
+      --scanline: rgba(0,0,0,0);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 48px 48px;
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      padding: 40px 20px 80px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        var(--scanline) 2px,
+        var(--scanline) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .container { max-width: 860px; margin: 0 auto; }
+
+    /* ── Header ── */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 48px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(18px, 4vw, 30px);
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: var(--cyan);
+      text-shadow: 0 0 20px var(--glow), 0 0 60px rgba(0,212,255,0.2);
+      line-height: 1.1;
+    }
+
+    .site-sub {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    .site-date {
+      text-align: right;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      line-height: 1.8;
+    }
+
+    .site-date strong { color: var(--text); display: block; font-size: 13px; }
+
+    /* ── Game section ── */
+    .game-section { margin-bottom: 16px; }
+
+    .game-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .game-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(14px, 3vw, 20px);
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .atl-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--red);
+      border: 1px solid var(--red);
+      padding: 3px 10px;
+      text-shadow: 0 0 8px rgba(255,34,85,0.8);
+      box-shadow: 0 0 12px rgba(255,34,85,0.2), inset 0 0 8px rgba(255,34,85,0.05);
+      animation: atl-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes atl-pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 12px rgba(255,34,85,0.2), inset 0 0 8px rgba(255,34,85,0.05); }
+      50%       { opacity: 0.7; box-shadow: 0 0 20px rgba(255,34,85,0.4), inset 0 0 12px rgba(255,34,85,0.1); }
+    }
+
+    /* ── Panels ── */
+    .panel {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--game-colour, var(--cyan)), transparent);
+      opacity: 0.4;
+    }
+
+    .panel-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+    }
+
+    /* ── Deal rows ── */
+    .deal-row {
+      display: grid;
+      grid-template-columns: 44px 1fr auto auto;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid rgba(0,212,255,0.05);
+      gap: 12px;
+      transition: background 0.15s;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .deal-row:last-child { border-bottom: none; }
+    .deal-row:hover { background: rgba(0,212,255,0.07); }
+    .deal-row:hover .deal-buy { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 8px rgba(0,212,255,0.3); }
+
+    .deal-rank {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--muted);
+    }
+
+    .rank-gold   { color: var(--cyan);  text-shadow: 0 0 10px var(--glow); }
+    .rank-silver { color: #5a8fa8; }
+    .rank-bronze { color: #3a5a6a; }
+
+    .deal-shop {
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cut-badge {
+      font-size: 9px;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--green);
+      border: 1px solid rgba(0,255,136,0.3);
+      background: rgba(0,255,136,0.06);
+      padding: 1px 6px;
+      letter-spacing: 1px;
+    }
+
+    .deal-buy {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text);
+      padding: 4px 10px;
+      border: 1px solid rgba(0,212,255,0.3);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .deal-price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--cyan);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* ── Game hero image ── */
+    .game-hero {
+      height: 60px;
+      width: 128px;
+      border: 1px solid rgba(255,255,255,0.08);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .game-header-text {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Chart ── */
+    .chart-panel { }
+
+    .canvas-wrap {
+      padding: 20px 16px 8px;
+      position: relative;
+    }
+
+    .canvas-wrap canvas {
+      filter: drop-shadow(0 0 8px rgba(0,212,255,0.2));
+    }
+
+    .chart-stats {
+      display: flex;
+      gap: 0;
+      padding: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .chart-stats span {
+      flex: 1;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      padding: 10px 8px;
+      border-right: 1px solid var(--border);
+      text-transform: uppercase;
+    }
+
+    .chart-stats span:last-child { border-right: none; }
+    .chart-stats strong { color: var(--text); display: block; font-size: 13px; margin-top: 3px; }
+
+    /* ── Section rule ── */
+    .section-rule {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 40px 0;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      margin-top: 60px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ── Report link bar (email only) ── */
+    .report-link-bar {
+      margin-bottom: 28px;
+      text-align: center;
+      padding: 12px;
+      border: 1px solid var(--border);
+      background: var(--surf);
+      position: relative;
+    }
+
+    .report-link-bar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0.4;
+    }
+
+    .report-link-bar a {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    .report-link-bar a:hover { text-decoration: underline; }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 10000;
+      background: var(--surf);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+    }
+
+    .theme-toggle:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px rgba(0,136,187,0.2);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 540px) {
+      .deal-row { grid-template-columns: 36px 1fr auto; }
+      .deal-link { display: none; }
+      .site-header { flex-direction: column; gap: 12px; }
+      .site-date { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">◐ LIGHT</button>
+  <div class="container">
+
+    <header class="site-header">
+      <div>
+        <div class="site-title">// STEAM KEY TRACKER</div>
+        <div class="site-sub">Price Intelligence · EU / Global Keys · IsThereAnyDeal</div>
+      </div>
+      <div class="site-date">
+        <strong>Monday, 9 March 2026</strong>
+        REGION: GB · GBP
+      </div>
+    </header>
+
+    
+
+    
+    <section class="game-section">
+      <div class="game-header">
+        <img class="game-hero" src="https://cdn.akamai.steamstatic.com/steam/apps/3065800/header.jpg" alt="Marathon">
+        <div class="game-header-text">
+          <h2 class="game-title" style="color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.4)">◈ Marathon</h2>
+          
+        </div>
+      </div>
+
+      <div class="panel deals-panel" style="--game-colour:#00d4ff;--game-rgb:0,212,255">
+        <div class="panel-label">CURRENT BEST PRICES</div>
+        
+        <a class="deal-row" href="https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-gold" style="color:#00d4ff">#1</span>
+          <span class="deal-shop">
+            GamesPlanet US
+            <span class="cut-badge">-10%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" style="color:#00d4ff">£27.02</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/019beb21-7225-70bf-96e7-c4425cfe6371/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-silver" >#2</span>
+          <span class="deal-shop">
+            WinGameStore
+            <span class="cut-badge">-5%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£28.52</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/01980f0c-bb40-708e-8cd5-55c75e174da7/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#3</span>
+          <span class="deal-shop">
+            GreenManGaming
+            <span class="cut-badge">-15%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£29.74</span>
+        </a>
+      </div>
+
+      
+      <div class="panel chart-panel" style="--game-colour:#00d4ff;--game-rgb:0,212,255">
+        <div class="panel-label">PRICE HISTORY</div>
+        <div class="canvas-wrap">
+          <canvas id="chart-marathon"></canvas>
+        </div>
+        <div class="chart-stats">
+          <span>TRACKED <strong>6d</strong></span>
+          <span>ALL-TIME LOW <strong>£26.84</strong></span>
+          <span>TODAY <strong>£27.02</strong></span>
+        </div>
+      </div>
+    </section><div class="section-rule"></div>
+    <section class="game-section">
+      <div class="game-header">
+        <img class="game-hero" src="https://cdn.akamai.steamstatic.com/steam/apps/1285190/header.jpg" alt="Borderlands 4">
+        <div class="game-header-text">
+          <h2 class="game-title" style="color:#ff44cc;text-shadow:0 0 12px rgba(255,68,204,0.4)">◈ Borderlands 4</h2>
+          <span class="atl-badge">◈ ALL-TIME LOW</span>
+        </div>
+      </div>
+
+      <div class="panel deals-panel" style="--game-colour:#ff44cc;--game-rgb:255,68,204">
+        <div class="panel-label">CURRENT BEST PRICES</div>
+        
+        <a class="deal-row" href="https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-gold" style="color:#ff44cc">#1</span>
+          <span class="deal-shop">
+            GreenManGaming
+            <span class="cut-badge">-40%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" style="color:#ff44cc">£36.11</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/0197ab78-5b6b-7205-926e-708755f91aeb/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-silver" >#2</span>
+          <span class="deal-shop">
+            GreenManGaming
+            <span class="cut-badge">-40%</span>
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£36.11</span>
+        </a>
+        <a class="deal-row" href="https://itad.link/01978382-1703-7143-8edd-f2c9003d8943/" target="_blank" rel="noopener">
+          <span class="deal-rank rank-bronze" >#3</span>
+          <span class="deal-shop">
+            WinGameStore
+            
+          </span>
+          <span class="deal-buy">BUY ›</span>
+          <span class="deal-price" >£52.54</span>
+        </a>
+      </div>
+
+      
+      <div class="panel chart-panel" style="--game-colour:#ff44cc;--game-rgb:255,68,204">
+        <div class="panel-label">PRICE HISTORY</div>
+        <div class="canvas-wrap">
+          <canvas id="chart-borderlands-4"></canvas>
+        </div>
+        <div class="chart-stats">
+          <span>TRACKED <strong>15d</strong></span>
+          <span>ALL-TIME LOW <strong>£36.11</strong></span>
+          <span>TODAY <strong>£36.11</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>SOURCE: ISTHEREANYDEAL.COM</span>
+      <span>CURRENCY: GBP · COUNTRY: GB</span>
+      <span>AUTO-UPDATED DAILY</span>
+    </footer>
+
+  </div>
+
+  <script>
+    // ── Theme ─────────────────────────────────────────────────────────────────
+    const TOGGLE_BTN = document.getElementById('themeToggle');
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme === 'light' ? 'light' : '';
+      TOGGLE_BTN.textContent = theme === 'light' ? '◐ DARK' : '◐ LIGHT';
+      localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.dataset.theme;
+      applyTheme(current === 'light' ? 'dark' : 'light');
+    }
+
+    applyTheme(localStorage.getItem('theme') || 'dark');
+
+    // ── Charts ────────────────────────────────────────────────────────────────
+    const DATA = {"currency":{"code":"GBP","symbol":"£","country":"GB"},"games":[{"title":"Marathon","slug":"marathon","topDeals":[{"rank":1,"price":27.02,"cut":10,"shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/"},{"rank":2,"price":28.52,"cut":5,"shop":"WinGameStore","url":"https://itad.link/019beb21-7225-70bf-96e7-c4425cfe6371/"},{"rank":3,"price":29.74,"cut":15,"shop":"GreenManGaming","url":"https://itad.link/01980f0c-bb40-708e-8cd5-55c75e174da7/"}],"history":[{"date":"2026-02-11","price":"34.99","shop":"DLGamer","url":""},{"date":"2026-02-23","price":"30.99","shop":"AllYouPlay","url":""},{"date":"2026-03-04","price":"34.99","shop":"AllYouPlay","url":""},{"date":"2026-03-06","price":"31.49","shop":"IndieGala Store","url":""},{"date":"2026-03-08","price":"26.84","shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/"},{"date":"2026-03-09","price":27.02,"shop":"GamesPlanet US","url":"https://itad.link/019be0e4-e190-72e1-bcd3-de26dc7c7a1a/"}],"allTimeLow":26.84,"isAtl":false,"daysTracked":6,"colour":"#00d4ff","steamAppId":"3065800"},{"title":"Borderlands 4","slug":"borderlands-4","topDeals":[{"rank":1,"price":36.11,"cut":40,"shop":"GreenManGaming","url":"https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/"},{"rank":2,"price":36.11,"cut":40,"shop":"GreenManGaming","url":"https://itad.link/0197ab78-5b6b-7205-926e-708755f91aeb/"},{"rank":3,"price":52.54,"cut":0,"shop":"WinGameStore","url":"https://itad.link/01978382-1703-7143-8edd-f2c9003d8943/"}],"history":[{"date":"2026-02-09","price":"41.99","shop":"Epic Game Store","url":""},{"date":"2026-02-10","price":"59.99","shop":"GamersGate","url":""},{"date":"2026-02-11","price":"56.99","shop":"GameBillet","url":""},{"date":"2026-02-16","price":"36.53","shop":"GreenManGaming","url":""},{"date":"2026-02-17","price":"41.99","shop":"IndieGala Store","url":""},{"date":"2026-02-19","price":"59.99","shop":"Steam","url":""},{"date":"2026-02-21","price":"59.99","shop":"2game","url":""},{"date":"2026-02-22","price":"56.39","shop":"2game","url":""},{"date":"2026-02-23","price":"59.99","shop":"Epic Game Store","url":""},{"date":"2026-02-26","price":"59.99","shop":"Humble Store","url":""},{"date":"2026-03-03","price":"59.99","shop":"GamersGate","url":""},{"date":"2026-03-04","price":"56.99","shop":"GameBillet","url":""},{"date":"2026-03-06","price":"36.11","shop":"GreenManGaming","url":""},{"date":"2026-03-08","price":"36.11","shop":"GreenManGaming","url":"https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/"},{"date":"2026-03-09","price":36.11,"shop":"GreenManGaming","url":"https://itad.link/01977d67-b1a5-72de-95a2-399819b112df/"}],"allTimeLow":36.11,"isAtl":true,"daysTracked":15,"colour":"#ff44cc","steamAppId":"1285190"}]};
+    const SYM  = DATA.currency.symbol;
+
+    Chart.defaults.color         = '#7a8a9a';
+    Chart.defaults.font.family   = "'Share Tech Mono', monospace";
+    Chart.defaults.font.size     = 11;
+
+    function fmtDate(iso) {
+      const [y, m, d] = iso.split('-');
+      return d + '/' + m + '/' + y;
+    }
+
+    DATA.games.forEach(game => {
+      const canvas   = document.getElementById('chart-' + game.slug);
+      const ctx      = canvas.getContext('2d');
+      const dates    = game.history.map(h => fmtDate(h.date));
+      const prices   = game.history.map(h => parseFloat(h.price));
+      const shops    = game.history.map(h => h.shop);
+      const minPrice = Math.min(...prices);
+      const minIdx   = prices.indexOf(minPrice);
+      const colour   = game.colour;
+      const rgb      = colour.slice(1).match(/.{2}/g).map(x => parseInt(x, 16)).join(',');
+
+      const grad = ctx.createLinearGradient(0, 0, 0, 300);
+      grad.addColorStop(0, 'rgba(' + rgb + ',0.18)');
+      grad.addColorStop(1, 'rgba(' + rgb + ',0)');
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: dates,
+          datasets: [{
+            data:                prices,
+            borderColor:         colour,
+            backgroundColor:     grad,
+            borderWidth:         2,
+            pointRadius:         4,
+            pointHoverRadius:    8,
+            pointBackgroundColor: colour,
+            pointBorderColor:    '#07080d',
+            pointBorderWidth:    2,
+            pointHoverBackgroundColor: '#ffffff',
+            fill:                true,
+            tension:             0,
+          }],
+        },
+        options: {
+          responsive:  true,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor:  (ctx) => getComputedStyle(document.documentElement).getPropertyValue('--surf').trim(),
+              borderColor:      'rgba(' + rgb + ',0.4)',
+              borderWidth:      1,
+              titleColor:       (ctx) => getComputedStyle(document.documentElement).getPropertyValue('--muted').trim(),
+              bodyColor:        (ctx) => getComputedStyle(document.documentElement).getPropertyValue('--text').trim(),
+              padding:          14,
+              cornerRadius:     0,
+              displayColors:    false,
+              callbacks: {
+                title:       (items) => items[0].label,
+                label:       (item)  => '  Price  ' + SYM + item.raw.toFixed(2),
+                afterLabel:  (item)  => '  Shop   ' + shops[item.dataIndex],
+              },
+            },
+            annotation: {
+              annotations: {
+                atlDot: {
+                  type:            'point',
+                  xValue:          minIdx,
+                  yValue:          minPrice,
+                  radius:          7,
+                  backgroundColor: '#ff6b35',
+                  borderColor:     '#ff6b35',
+                },
+                atlLabel: {
+                  type:    'label',
+                  xValue:  minIdx,
+                  yValue:  minPrice,
+                  content: ['ALL-TIME LOW  ' + SYM + minPrice.toFixed(2)],
+                  font:    { family: 'Orbitron', size: 9, weight: '600' },
+                  color:   '#ff6b35',
+                  xAdjust: 80,
+                  yAdjust: -16,
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              grid:  { color: 'rgba(' + rgb + ',0.04)' },
+              ticks: { maxTicksLimit: 8, maxRotation: 40 },
+            },
+            y: {
+              grid:  { color: 'rgba(0,212,255,0.06)' },
+              ticks: { callback: v => SYM + v.toFixed(2) },
+            },
+          },
+        },
+      });
+    });
+  </script>
+</body>
+</html>
